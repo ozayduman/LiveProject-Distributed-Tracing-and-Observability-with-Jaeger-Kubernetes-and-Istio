@@ -34,7 +34,7 @@ public class EShopController {
         val user = httpHeaders.getFirst("user");
         val span = tracer.buildSpan("checkout").start();
         span.setBaggageItem("user", user);
-        
+
         var result="";
         try {
             val outboundHeaders = new HttpHeaders();

@@ -1,4 +1,4 @@
-# This repository contains source code deliverables of my technical review for the Manning Distributed Tracing and Observability with Jaeger, Kubernetes, and Istio LiveProject.
+# This repository contains source code deliverables of my technical review for the Manning [Distributed Tracing and Observability with Jaeger, Kubernetes, and Istio](https://liveproject.manning.com/project/621) LiveProject.
 
 ### HOW TO RUN 
 Build docker images of each microservices as indicated in their own README.md files. Then, deploy kubernetes objects following the instuctions below:
