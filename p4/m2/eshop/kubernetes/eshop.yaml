@@ -1,0 +1,221 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eshop
+  labels:
+    app: eshop
+spec:
+  selector:
+    app: eshop
+  ports:
+    - port: 8080
+      name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory
+  labels:
+    app: inventory
+spec:
+  selector:
+    app: inventory
+  ports:
+    - port: 8080
+      name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: billing
+  labels:
+    app: billing
+spec:
+  selector:
+    app: billing
+  ports:
+    - port: 8080
+      name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery
+  labels:
+    app: delivery
+spec:
+  selector:
+    app: delivery
+  ports:
+    - port: 8080
+      name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: logistics
+  labels:
+    app: logistics
+spec:
+  selector:
+    app: logistics
+  ports:
+    - port: 8080
+      name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jaeger
+  labels:
+    app: jaeger
+spec:
+  selector:
+    app: jaeger
+  ports:
+    - port: 14268
+      name: http-collector
+    - port: 16686
+      name: http-ui
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eshop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eshop
+  template:
+    metadata:
+      labels:
+        app: eshop
+    spec:
+      containers:
+        - name: eshop
+          image: ozay/eshop:v4.2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAEGER_ENDPOINT
+              value: "http://jaeger:14268/api/traces"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory
+  template:
+    metadata:
+      labels:
+        app: inventory
+    spec:
+      containers:
+        - name: inventory
+          image: ozay/inventory:v4.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAEGER_ENDPOINT
+              value: "http://jaeger:14268/api/traces"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: billing
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: billing
+  template:
+    metadata:
+      labels:
+        app: billing
+    spec:
+      containers:
+        - name: billing
+          image: ozay/billing:v4.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAEGER_ENDPOINT
+              value: "http://jaeger:14268/api/traces"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delivery
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: delivery
+  template:
+    metadata:
+      labels:
+        app: delivery
+    spec:
+      containers:
+        - name: delivery
+          image: ozay/delivery:v4.2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAEGER_ENDPOINT
+              value: "http://jaeger:14268/api/traces"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logistics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logistics
+  template:
+    metadata:
+      labels:
+        app: logistics
+    spec:
+      containers:
+        - name: logistics
+          image: ozay/logistics:v4.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAEGER_ENDPOINT
+              value: "http://jaeger:14268/api/traces"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jaeger
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jaeger
+  template:
+    metadata:
+      labels:
+        app: jaeger
+    spec:
+      containers:
+        - name: jaeger
+          image: jaegertracing/all-in-one:1.24
+          ports:
+            - containerPort: 14268
+            - containerPort: 16686
+
